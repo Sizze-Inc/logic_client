@@ -1,0 +1,13 @@
+README.md
+setup.py
+sizze_logic_client/__init__.py
+sizze_logic_client/client.py
+sizze_logic_client/settings.py
+sizze_logic_client.egg-info/PKG-INFO
+sizze_logic_client.egg-info/SOURCES.txt
+sizze_logic_client.egg-info/dependency_links.txt
+sizze_logic_client.egg-info/top_level.txt
+sizze_logic_client/api/__init__.py
+sizze_logic_client/api/actions.py
+sizze_logic_client/api/base.py
+sizze_logic_client/api/variables.py
