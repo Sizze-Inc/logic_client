@@ -15,7 +15,7 @@ class ActionClient(Client):
     async def retrieve(self, action_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                url=self.base_url + f"variable/{action_id}/retrieve/"
+                url=self.base_url + f"action/{action_id}/retrieve/"
             ) as response:
                 response_body = await response.json()
                 return response_body, response.status
