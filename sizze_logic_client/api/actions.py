@@ -41,7 +41,7 @@ class ActionClient(Client):
 
     async def delete(self, action_id: int):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.delete(
                 url=self.base_url + f"action/{action_id}/delete/",
             ) as response:
                 if response.status == 204:
