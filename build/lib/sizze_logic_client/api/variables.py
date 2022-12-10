@@ -5,10 +5,18 @@ import aiohttp
 class VariableClient(Client):
     async def create(self, data) -> (str, bool):
         async with aiohttp.ClientSession() as session:
-            result = True
             async with session.post(
                 url=self.base_url + "variable/create/",
                 json=data
+            ) as response:
+                response_body = await response.json()
+            return response_body, response.status
+
+    async def create_by_table(self, data):
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                    url=self.base_url + "variable/create_by_table/",
+                    json=data
             ) as response:
                 response_body = await response.json()
             return response_body, response.status
