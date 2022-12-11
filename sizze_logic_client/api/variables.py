@@ -29,16 +29,11 @@ class VariableClient(Client):
                 response_body = await response.json()
                 return response_body, response.status
 
-    async def list(self, page_id: int = None, project_id: int = None):
-        params = {}
-        if page_id:
-            params["page_id"] = page_id
-        if project_id:
-            params["project_id"] = project_id
+    async def list(self, **params):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 url=self.base_url + "variable/list/",
-                params={**params}
+                params=params
             ) as response:
                 response_body = await response.json()
                 return response_body, response.status
@@ -63,8 +58,7 @@ class VariableClient(Client):
                     response_body = await response.json()
                     return response_body, response.status
 
-    async def multiple_delete(self, page_id: int = None, project_id: int = None):
-        params = {"page_id": page_id, "project_id": project_id}
+    async def multiple_delete(self, **params):
         async with aiohttp.ClientSession() as session:
             async with session.delete(
                 url=self.base_url + "variable/multiple-delete/",

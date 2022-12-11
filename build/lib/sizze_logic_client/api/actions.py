@@ -20,8 +20,7 @@ class ActionClient(Client):
                 response_body = await response.json()
                 return response_body, response.status
 
-    async def list(self, page_id: int = None, project_id: int = None):
-        params = {"page_id": page_id, "project_id": project_id}
+    async def list(self, **params):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 url=self.base_url + "action/list/",
@@ -50,8 +49,7 @@ class ActionClient(Client):
                     response_body = await response.json()
                     return response_body, response.status
 
-    async def multiple_delete(self, page_id: int = None, project_id: int = None):
-        params = {"page_id": page_id, "project_id": project_id}
+    async def multiple_delete(self, **params):
         async with aiohttp.ClientSession() as session:
             async with session.delete(
                 url=self.base_url + "action/multiple-delete/",
