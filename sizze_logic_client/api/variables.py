@@ -30,10 +30,12 @@ class VariableClient(Client):
                 return response_body, response.status
 
     async def list(self, **params):
+        validate_params = await self.validate_params(params=params)
+
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 url=self.base_url + "variable/list/",
-                params=params
+                params=validate_params
             ) as response:
                 response_body = await response.json()
                 return response_body, response.status
@@ -59,10 +61,12 @@ class VariableClient(Client):
                     return response_body, response.status
 
     async def multiple_delete(self, **params):
+        validate_params = await self.validate_params(params=params)
+
         async with aiohttp.ClientSession() as session:
             async with session.delete(
                 url=self.base_url + "variable/multiple-delete/",
-                params=params
+                params=validate_params
             ) as response:
                 if response.status == 204:
                     return None, response.status
