@@ -1,66 +1,36 @@
-from sizze_logic_client.api.base import Client
-import aiohttp
+from sizze_logic_client.api.base import Client, ServerResponse
 
 
 class ActionClient(Client):
     async def create(self, data):
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                url=self.base_url + "action/create/",
-                json=data
-            ) as response:
-                response_body = await response.json()
-            return response_body, response.status
+        self.path = "action/create/"
+        response = await self.send_request(method="post", data=data)
+        return response
 
     async def retrieve(self, action_id: int):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                url=self.base_url + f"action/{action_id}/retrieve/"
-            ) as response:
-                response_body = await response.json()
-                return response_body, response.status
+        self.path = f"action/{action_id}/retrieve/"
+        response = await self.send_request(method="get", action_id=action_id)
+        return response
 
-    async def list(self, **params):
-        validate_params = await self.validate_params(params=params)
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                url=self.base_url + "action/list/",
-                params=validate_params
-            ) as response:
-                response_body = await response.json()
-                return response_body, response.status
+    async def list(self, page_id: int = None, project_id: int = None):
+        self.path = "action/list/"
+        response = await self.send_request(method="get", page_id=page_id, project_id=project_id)
+        return response
 
     async def update(self, action_id: int, data):
-        async with aiohttp.ClientSession() as session:
-            async with session.put(
-                    url=self.base_url + f"action/{action_id}/update/",
-                    json=data
-            ) as response:
-                response_body = await response.json()
-                return response_body, response.status
+        self.path = f"action/{action_id}/update/"
+        response = await self.send_request(method="put", data=data)
+        return response
 
     async def delete(self, action_id: int):
-        async with aiohttp.ClientSession() as session:
-            async with session.delete(
-                url=self.base_url + f"action/{action_id}/delete/",
-            ) as response:
-                if response.status == 204:
-                    return None, response.status
-                else:
-                    response_body = await response.json()
-                    return response_body, response.status
+        self.path = f"action/{action_id}/delete/"
+        response = await self.send_request(method="delete", action_id=action_id)
+        return response
 
-    async def multiple_delete(self, **params):
-        validate_params = await self.validate_params(params=params)
+    async def multiple_delete(self, page_id: int = None, project_id: int = None):
+        self.path = "action/multiple-delete/"
+        response = await self.send_request(method="delete", page_id=page_id, project_id=project_id)
+        return response
 
-        async with aiohttp.ClientSession() as session:
-            async with session.delete(
-                url=self.base_url + "action/multiple-delete/",
-                params=validate_params
-            ) as response:
-                if response.status == 204:
-                    return None, response.status
-                else:
-                    response_body = await response.json()
-                    return response_body, response.status
+
+action_client = ActionClient

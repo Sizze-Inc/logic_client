@@ -1,7 +1,6 @@
 README.md
 setup.py
 sizze_logic_client/__init__.py
-sizze_logic_client/client.py
 sizze_logic_client/settings.py
 sizze_logic_client.egg-info/PKG-INFO
 sizze_logic_client.egg-info/SOURCES.txt
