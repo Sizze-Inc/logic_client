@@ -7,36 +7,37 @@ class VariableClient(Client):
         response = await self.send_request(method="post", data=data)
         return response
 
-    async def create_by_table(self, data) -> ServerResponse:
-        self.path = "variable/create_by_table/"
-        response = await self.send_request(method="post", data=data)
+    async def add_to_category(self, variable_id, category_id) -> ServerResponse:
+        self.path = f"variable/{variable_id}/category/add/"
+        response = await self.send_request(method="post", data={"category_id": category_id})
         return response
 
-    async def create_field_variable(self, page_id, project_id, variable_name,
-                                    field_id, field_index, table_id, table_index,
-                                    path):
-        variable_body = dict(
-            type="TABLE_FIELD_VALUE",
-            path=path,
-            table=dict(table_id=table_id, table_index=table_index),
-            field=dict(field_id=field_id, field_index=field_index)
-        )
-        data = dict(
-            name=variable_name,
-            variable=variable_body,
-            page_id=page_id,
-            project_id=project_id,
-        )
-        create_variable = await self.create(data=data)
+    async def remove_from_category(self, variable_id, category_id) -> ServerResponse:
+        self.path = f"variable/{variable_id}/category/remove/"
+        response = await self.send_request(method="post", data={"category_id": category_id})
+        return response
+
+    async def create_field_variable(self, field_name, field_id, field_path) -> ServerResponse:
+        data = {
+            "name": field_name,
+            "type": "field",
+            "indicator": field_id,
+            "path": field_path,
+        }
+        field_variable = await self.create(data=data)
+        return field_variable
 
     async def retrieve(self, variable_id: int) -> ServerResponse:
         self.path = f"variable/{variable_id}/retrieve/"
         response = await self.send_request(method="get", variable_id=variable_id)
         return response
 
-    async def list(self, page_id: int = None, project_id: int = None) -> ServerResponse:
+    async def list(self, category_id: int = None, category_type: str = None, category_indicator: str = None)\
+            -> ServerResponse:
         self.path = "variable/list/"
-        response = await self.send_request(method="get", page_id=page_id, project_id=project_id)
+        response = await self.send_request(
+            method="get", category_id=category_id, category_type=category_type, category_indicator=category_indicator
+        )
         return response
 
     async def update(self, variable_id: int, data) -> ServerResponse:
@@ -49,12 +50,54 @@ class VariableClient(Client):
         response = await self.send_request(method="delete", variable_id=variable_id)
         return response
 
-    async def multiple_delete(self, page_id: int = None, project_id: int = None,
-                              table_id: str = None, field_id: str = None):
+    async def multiple_delete(self, category_id: int):
         self.path = "variable/multiple-delete/"
-        response = await self.send_request(method="delete", page_id=page_id, project_id=project_id,
-                                           table_id=table_id, field_id=field_id)
+        response = await self.send_request(method="delete", category_id=category_id)
         return response
 
 
 variable_client = VariableClient()
+
+
+class CategoryClient(Client):
+    async def create(self, data) -> ServerResponse:
+        self.path = "variable/category/create/"
+        response = await self.send_request(method="post", data=data)
+        return response
+
+    async def create_table_category(self, parent_id, table_id, field_list=None) -> ServerResponse:
+        data = {
+            "type": "table",
+            "indicator": table_id,
+            "parent": parent_id
+        }
+        table_category = await self.create(data=data)
+        if field_list:
+            for field in field_list:
+                await variable_client.create_field_variable(**field)
+        return table_category
+
+    async def retrieve(self, category_id: int) -> ServerResponse:
+        self.path = f"variable/category/{category_id}/retrieve/"
+        response = await self.send_request(method="get", category_id=category_id)
+        return response
+
+    async def list(self, type: str = None, indicator: str = None, parent: int = None) -> ServerResponse:
+        self.path = "variable/category/list/"
+        response = await self.send_request(
+            method="get", type=type, indicator=indicator, parent=parent
+        )
+        return response
+
+    async def update(self, category_id: int, data) -> ServerResponse:
+        self.path = f"variable/category/{category_id}/update/"
+        response = await self.send_request(method="put", data=data)
+        return response
+
+    async def delete(self, category_id: int) -> ServerResponse:
+        self.path = f"variable/category/{category_id}/delete/"
+        response = await self.send_request(method="delete", category_id=category_id)
+        return response
+
+
+category_client = CategoryClient()
