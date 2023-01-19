@@ -33,4 +33,4 @@ class ActionClient(Client):
         return response
 
 
-action_client = ActionClient
+action_client = ActionClient()
