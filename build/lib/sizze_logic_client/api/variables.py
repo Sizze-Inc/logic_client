@@ -32,11 +32,13 @@ class VariableClient(Client):
         response = await self.send_request(method="get", variable_id=variable_id)
         return response
 
-    async def list(self, category_id: int = None, category_type: str = None, category_indicator: str = None)\
+    async def list(self, variable_type: str = None, category_id: int = None,
+                   category_type: str = None, category_indicator: str = None)\
             -> ServerResponse:
         self.path = "variable/list/"
         response = await self.send_request(
-            method="get", category_id=category_id, category_type=category_type, category_indicator=category_indicator
+            method="get", category_id=category_id, category_type=category_type,
+            category_indicator=category_indicator, type=variable_type
         )
         return response
 
@@ -74,7 +76,8 @@ class CategoryClient(Client):
         table_category = await self.create(data=data)
         if field_list:
             for field in field_list:
-                await variable_client.create_field_variable(**field)
+                variable = await variable_client.create_field_variable(**field)
+                await variable_client.add_to_category(category_id=table_category.id, variable_id=variable.id)
         return table_category
 
     async def retrieve(self, category_id: int) -> ServerResponse:
