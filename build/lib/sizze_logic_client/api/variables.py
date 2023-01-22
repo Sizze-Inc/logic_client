@@ -43,6 +43,13 @@ class VariableClient(Client):
         )
         return response
 
+    async def nested_list(self, category_id) -> ServerResponse:
+        self.path = "variable/nested_list/"
+        response = await self.send_request(
+            method="get", category_id=category_id
+        )
+        return response
+
     async def update(self, variable_id: int, data) -> ServerResponse:
         self.path = f"variable/{variable_id}/update/"
         response = await self.send_request(method="put", data=data)
