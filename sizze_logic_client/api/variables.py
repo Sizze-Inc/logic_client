@@ -17,12 +17,13 @@ class VariableClient(Client):
         response = await self.send_request(method="post", data={"category_id": category_id})
         return response
 
-    async def create_field_variable(self, field_name, field_id, field_path) -> ServerResponse:
+    async def create_field_variable(self, field_name, field_id, field_path, categories) -> ServerResponse:
         data = {
             "name": field_name,
             "type": "field",
             "indicator": field_id,
             "path": field_path,
+            "categories": categories
         }
         field_variable = await self.create(data=data)
         return field_variable
@@ -76,8 +77,8 @@ class CategoryClient(Client):
         table_category = await self.create(data=data)
         if field_list:
             for field in field_list:
-                variable = await variable_client.create_field_variable(**field)
-                await variable_client.add_to_category(category_id=table_category.id, variable_id=variable.id)
+                field["categories"] = [table_category.id]
+                await variable_client.create_field_variable(**field)
         return table_category
 
     async def retrieve(self, category_id: int) -> ServerResponse:
