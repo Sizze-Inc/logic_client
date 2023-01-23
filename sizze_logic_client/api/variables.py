@@ -33,10 +33,10 @@ class VariableClient(Client):
         response = await self.send_request(method="get", variable_indicator=variable_indicator)
         return response
 
-    async def list(self, parent) -> ServerResponse:
+    async def list(self, category_indicator) -> ServerResponse:
         self.path = "variable/list/"
         response = await self.send_request(
-            method="get", parent=parent
+            method="get", category_indicator=category_indicator
         )
         return response
 
@@ -72,6 +72,16 @@ class CategoryClient(Client):
         response = await self.send_request(method="post", data=data)
         return response
 
+    async def add_to_parent(self, child, parent) -> ServerResponse:
+        self.path = f"/category/{child}/add/"
+        response = await self.send_request(method="post", data={"category_indicator": parent})
+        return response
+
+    async def remove_from_parent(self, child, parent) -> ServerResponse:
+        self.path = f"/category/{child}/remove/"
+        response = await self.send_request(method="post", data={"category_indicator": parent})
+        return response
+
     async def create_table_category(self, parent_id, table_id, field_list=None) -> ServerResponse:
         data = {
             "type": "table",
@@ -90,10 +100,10 @@ class CategoryClient(Client):
         response = await self.send_request(method="get", category_indicator=category_indicator)
         return response
 
-    async def list(self, category_indicator: str = None) -> ServerResponse:
+    async def list(self, parent: str = None) -> ServerResponse:
         self.path = "variable/category/list/"
         response = await self.send_request(
-            method="get", category_indicator=category_indicator
+            method="get", parent=parent
         )
         return response
 
