@@ -86,7 +86,7 @@ class CategoryClient(Client):
         data = {
             "type": "table",
             "indicator": table_id,
-            "parent": parent_id
+            "parents": [parent_id]
         }
         table_category = await self.create(data=data)
         if field_list:
