@@ -73,12 +73,12 @@ class CategoryClient(Client):
         return response
 
     async def add_to_parent(self, child, parent) -> ServerResponse:
-        self.path = f"/category/{child}/add/"
+        self.path = f"variable/category/{child}/add/"
         response = await self.send_request(method="post", data={"category_indicator": parent})
         return response
 
     async def remove_from_parent(self, child, parent) -> ServerResponse:
-        self.path = f"/category/{child}/remove/"
+        self.path = f"variable/category/{child}/remove/"
         response = await self.send_request(method="post", data={"category_indicator": parent})
         return response
 
