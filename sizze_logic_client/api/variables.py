@@ -7,13 +7,13 @@ class VariableClient(Client):
         response = await self.send_request(method="post", data=data)
         return response
 
-    async def add_to_category(self, variable_id, category_id) -> ServerResponse:
-        self.path = f"variable/{variable_id}/category/add/"
+    async def add_to_category(self, variable_indicator, category_id) -> ServerResponse:
+        self.path = f"variable/{variable_indicator}/category/add/"
         response = await self.send_request(method="post", data={"category_id": category_id})
         return response
 
-    async def remove_from_category(self, variable_id, category_id) -> ServerResponse:
-        self.path = f"variable/{variable_id}/category/remove/"
+    async def remove_from_category(self, variable_indicator, category_id) -> ServerResponse:
+        self.path = f"variable/{variable_indicator}/category/remove/"
         response = await self.send_request(method="post", data={"category_id": category_id})
         return response
 
@@ -28,9 +28,9 @@ class VariableClient(Client):
         field_variable = await self.create(data=data)
         return field_variable
 
-    async def retrieve(self, variable_id: int) -> ServerResponse:
-        self.path = f"variable/{variable_id}/retrieve/"
-        response = await self.send_request(method="get", variable_id=variable_id)
+    async def retrieve(self, variable_indicator: int) -> ServerResponse:
+        self.path = f"variable/{variable_indicator}/retrieve/"
+        response = await self.send_request(method="get", variable_indicator=variable_indicator)
         return response
 
     async def list(self, variable_type: str = None, category_id: int = None,
@@ -50,14 +50,14 @@ class VariableClient(Client):
         )
         return response
 
-    async def update(self, variable_id: int, data) -> ServerResponse:
-        self.path = f"variable/{variable_id}/update/"
+    async def update(self, variable_indicator: int, data) -> ServerResponse:
+        self.path = f"variable/{variable_indicator}/update/"
         response = await self.send_request(method="put", data=data)
         return response
 
-    async def delete(self, variable_id: int) -> ServerResponse:
-        self.path = f"variable/{variable_id}/delete/"
-        response = await self.send_request(method="delete", variable_id=variable_id)
+    async def delete(self, variable_indicator: int) -> ServerResponse:
+        self.path = f"variable/{variable_indicator}/delete/"
+        response = await self.send_request(method="delete", variable_indicator=variable_indicator)
         return response
 
     async def multiple_delete(self, category_id: int):

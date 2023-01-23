@@ -30,7 +30,7 @@ class Client:
 
     async def get_id_from_data(self, data):
         if isinstance(data, dict):
-            _id = data.get("_id") or data.get("id")
+            _id = data.get("_id") or data.get("id") or data.get("variable_indicator")
         else:
             _id = None
         return _id
